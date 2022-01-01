@@ -1,0 +1,8 @@
+{
+    "config": {
+        "url": "stuff",
+        "username": "stuff",
+        "password": "super_secure_password",
+        "dw_path": "the/pat/to/your/folder"
+    }
+}
