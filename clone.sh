@@ -43,7 +43,7 @@ fi
 
 #Always overwrite backup
 START=`date +%s`
-wget -m "ftp://$USERNAME:$PASSWORD@$URL/$SERVER_PATH" -P $FULL_DW_PATH
+wget -m --user=$USERNAME --password=$PASSWORD "ftp://$URL/$SERVER_PATH" -P $FULL_DW_PATH
 END=`date +%s`
 
 RUNTIME=$((END-START))

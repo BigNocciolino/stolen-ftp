@@ -11,9 +11,10 @@ NOTE: this is a little learning script for understanding bash and some little co
 Before to modify the the config file (`config.json`) make sure to read the guide to configure it.
 
 ``` bash
-git clone repoNname
-cd repoNanem
+git clone https://github.com/BigNocciolino/stolen-ftp.git
+cd stolen-ftp
 nano config.json
+chmod +x clone.sh
 ./clone.sh 
 ```
 
@@ -37,10 +38,12 @@ This is the default config file.
 
 #### Options
 - `url` =This is the url of the ftp server 
-- `username` = Username for authenticate to the server (if have some special characters may you need to format it, see: [url encoding](https://www.w3schools.com/tags/ref_urlencode.ASP))
-- `password`= This is the password for the authentication (if have some special characters may you need to format it, see: [url encoding](https://www.w3schools.com/tags/ref_urlencode.ASP))
+- `username` = Username for authenticate to the server
+- `password`= This is the password for the authentication
 - `dw_path` = This is the path where the downloaded file are begin stores
 - `ftp_path` = This is the path of the folder or file on the remote server
+
+## Automate the script
 
 ## Features
 
