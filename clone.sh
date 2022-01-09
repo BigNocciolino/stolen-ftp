@@ -2,16 +2,37 @@
 
 #TODO: automatically delete old folders (mabye calling a third party script)
 # |¬ See: https://stackoverflow.com/questions/17945538/delete-directory-based-on-date
-#TODO: add colored output
-#TODO: better time logging in csv file for performace test
 
-URL=`jq .config.url config.json -r`
+CONFIG_PATH=""
+#Thanks to: https://stackoverflow.com/questions/4774054/reliable-way-for-a-bash-script-to-get-the-full-path-to-itself
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
+default_config() { CONFIG_PATH="$SCRIPTPATH/config.json"; }
+
+while getopts ":c:" o; do
+    case "${o}" in
+        c)
+            c=${OPTARG}
+            CONFIG_PATH=$c
+            ;;
+        *)
+            default_config
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "${c}" ]; then
+    default_config
+fi
+
+URL=`jq .config.url $CONFIG_PATH -r`
 #For special characters https://www.w3schools.com/tags/ref_urlencode.ASP
-USERNAME=`jq .config.username config.json -r`
-PASSWORD=`jq .config.password config.json -r`
+USERNAME=`jq .config.username $CONFIG_PATH -r`
+PASSWORD=`jq .config.password $CONFIG_PATH -r`
 DIR_NAME="/$(date +"%d-%m-%Y")"
-DIR_PATH=`jq .config.dw_path config.json -r`
-SERVER_PATH=`jq .config.ftp_path config.json -r`
+DIR_PATH=`jq .config.dw_path $CONFIG_PATH -r`
+SERVER_PATH=`jq .config.ftp_path $CONFIG_PATH -r`
 #DIR_COUNT=`ls -l $DIR_PATH | grep ^d | wc -l`
 FULL_DW_PATH=$DIR_PATH$DIR_NAME
 
@@ -34,11 +55,20 @@ if [[ -f "$LOG_FILE" ]]; then
     #File exist
     echo "---------- `date` ----------" >> $LOG_FILE
     echo "$LOG_INFO_PREFIX Starting full backup " >> $LOG_FILE
+    echo "$LOG_INFO_PREFIX Config file dir: $CONFIG_PATH" >> $LOG_FILE
     echo "$LOG_INFO_PREFIX OUTPUT DIR: $FULL_DW_PATH" >> $LOG_FILE
 else
     #File doesen't exist
     echo "Creating log file"
-    echo "BEGIN OF LOG FILE - $(date)" > $LOG_FILE
+    echo "BEGIN OF LOG FILE - $(date +%d-%m-%Y_%H-%M-%S)" > $LOG_FILE
+fi
+
+#Ceck for csv file
+if [[ -f "$CSV_FILE" ]]; then
+    echo "`date +%d-%m-%Y_%H-%M-%S`;0;0;0" >> $CSV_FILE
+else
+    echo "Creating csv file"
+    echo "Date (%d-%m-%Y_%H-%M-%S);Start (seconds since the Epoch);End (seconds since the Epoch);Job_time (seconds)" > $CSV_FILE
 fi
 
 #Always overwrite backup
@@ -48,13 +78,7 @@ END=`date +%s`
 
 RUNTIME=$((END-START))
 
-#Ceck for csv file
-if [[ -f "$CSV_FILE" ]]; then
-    echo "`date`;$START;$END;$RUNTIME" >> $CSV_FILE
-else
-    echo "Creating csv file"
-    echo "Date;Start;End;Job_running" > $CSV_FILE
-fi
+echo "`date +%d-%m-%Y_%H-%M-%S`;$START;$END;$RUNTIME" >> $CSV_FILE
 
-echo "$LOG_INFO_PREFIX Backup runned in $RUNTIME" >> $LOG_FILE
+echo "$LOG_INFO_PREFIX Backup runned in $RUNTIME s" >> $LOG_FILE
 echo "---------------------------------------" >> $LOG_FILE
