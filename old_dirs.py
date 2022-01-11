@@ -1,35 +1,43 @@
 import os
 import shutil
 import sys
-import json
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
+import logging
+import argparse
 
-argv = sys.argv
+parser = argparse.ArgumentParser(description="Find the saved folders with a date format and delete the oldest ones")
+parser.add_argument('-k', help="The number of backup folder to keep", type=int, default=4)
+parser.add_argument('dw_path', help="The path where the backup are stored")
+args = parser.parse_args()
 
-config_file=""
-
-if len(argv) > 1:
-    config_file = sys.argv[1]
-else:
-    config_file="config.json"
-
-#TODO add mush more logging
-f = open(config_file)
-data = json.load(f)
-f.close()
-
-path = data["config"]["dw_path"]
-keep_backup = data["config"]["keep_backup"]
-dir_list = os.listdir(path)
 #Regex pattern to find only folder named as date
 pattern = "^([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])(.|-)([1-9]|0[1-9]|1[0-2])(.|-|)20[0-9][0-9]$"
+path = args.dw_path
+keep_backup = args.k
+log_file = os.path.join(path, "log/log.txt")
 
-x=""
-date_dirs=[]
+#Confnig for the logger
+LOG_PY_PREFIX="[PY]"
+extra = {'log_py': LOG_PY_PREFIX}
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename=log_file, format='%(log_py)s %(message)s', level="INFO")
+logger = logging.LoggerAdapter(logger, extra)
+
+print(f"Starting log output at {log_file}")
+
+x = ""
+date_dirs = []
 old_folders = []
 filetimes = []
 keep = []
+
+try:
+    dir_list = os.listdir(path)
+except OSError:
+    logger.error("Invalid directory, can not list dirs, exiting")
+    sys.exit()
+
 if len(dir_list) > 0:
     #Travel all the list
     for dir in dir_list:
@@ -38,8 +46,7 @@ if len(dir_list) > 0:
         if (x):
             date_dirs.append(dir)
 else: 
-    #TODO beautify log 
-    print("The folder is empity")
+    logger.info("The download folder is empity")
 
 #Convert the string dates saved in date_dirs list into a datetime object
 #So after we can sort it
@@ -62,16 +69,19 @@ for x in range(keep_backup):
 for x in range(len(filetimes)):
     filetimes[x] = filetimes[x].strftime("%d-%m-%Y")
 #Now we delete that
-for dir in filetimes:
-    dir = os.path.join(path, dir)
-    if os.path.exists(dir):
-        try:
-            shutil.rmtree(dir)
-            print("removed '%s'" %dir)
-        except OSError as error:
-            print(error)
-            print("Directory '%s' can not be removed" %dir) 
-    else:
-        print("The path dowsent exist")
+if len(filetimes) <= 0:
+    logger.info("No dir to delete, skipping")
+else:
+    for dir in filetimes:
+        dir = os.path.join(path, dir)
+        if os.path.exists(dir):
+            try:
+                shutil.rmtree(dir)
+                logger.info("Removed '%s'" %dir)
+            except OSError as error:
+                logger.error(error)
+                logger.error("Directory '%s' can not be removed" %dir) 
+        else:
+            logger.error("The dir: %s does not exist" %dir)
 #And keep have the newest folders (yes we want that)
 
