@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-#TODO: automatically delete old folders (mabye calling a third party script)
-# |¬ See: https://stackoverflow.com/questions/17945538/delete-directory-based-on-date
-
 CONFIG_PATH=""
 #Thanks to: https://stackoverflow.com/questions/4774054/reliable-way-for-a-bash-script-to-get-the-full-path-to-itself
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
@@ -33,13 +30,14 @@ PASSWORD=`jq .config.password $CONFIG_PATH -r`
 DIR_NAME="/$(date +"%d-%m-%Y")"
 DIR_PATH=`jq .config.dw_path $CONFIG_PATH -r`
 SERVER_PATH=`jq .config.ftp_path $CONFIG_PATH -r`
+KEEP_BACKUP=`jq .config.keep_backup $CONFIG_PATH -r`
 #DIR_COUNT=`ls -l $DIR_PATH | grep ^d | wc -l`
 FULL_DW_PATH=$DIR_PATH$DIR_NAME
 
 LOG_DIR="$DIR_PATH/log"
 LOG_FILE="$LOG_DIR/log.txt"
-LOG_ERROR_PREFIX="[X]"
-LOG_INFO_PREFIX="[!]"
+LOG_ERROR_PREFIX="[X][BASH]"
+LOG_INFO_PREFIX="[!][BASH]"
 
 CSV_FILE="$LOG_DIR/performance.csv"
 
@@ -79,6 +77,10 @@ END=`date +%s`
 RUNTIME=$((END-START))
 
 echo "`date +%d-%m-%Y_%H-%M-%S`;$START;$END;$RUNTIME" >> $CSV_FILE
+
+#Start the script
+echo "$LOG_INFO_PREFIX Starting the old_dirs script" >> $LOG_FILE
+python3 old_dirs.py $FULL_DW_PATH -k $KEEP_BACKUP
 
 echo "$LOG_INFO_PREFIX Backup runned in $RUNTIME s" >> $LOG_FILE
 echo "---------------------------------------" >> $LOG_FILE
