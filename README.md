@@ -5,7 +5,7 @@ This is a little script written in bash for downloading files from a ftp server,
 NOTE: this is a little learning script for understanding bash and some little commands. I'm not an expert!
 
 # Requirements
-- `[jq](https://github.com/stedolan/jq)` (it comes pre-installed in a lot of distros)
+- [jq](https://github.com/stedolan/jq)(it comes pre-installed in a lot of distros)
 
 # Install
 **Before to modify the the config file (`config.json`) make sure to read the guide to modify it**
@@ -20,12 +20,12 @@ chmod +x clone.sh
 # Info
 
 - **The script download a file or a folder on the remote server secified in the config file**
-- **Save the output in a folder formatted as `%d-%m-%Y`in the download path**
+- **Save the output in a folder formatted as `%d-%m-%Y` in the download path**
 - **Run a python script to check and delete the oldest folders (only the time formatted)**
 
 # Usage
 
-You can run this script manually or you can [automate it](##automate-the-script)
+You can run this script manually or you can [automate it](#automate-the-script)
 
 **If you would to run it manually**
 
