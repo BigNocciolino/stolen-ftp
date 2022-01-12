@@ -5,7 +5,7 @@ This is a little script written in bash for downloading files from a ftp server,
 NOTE: this is a little learning script for understanding bash and some little commands. I'm not an expert!
 
 # Requirements
-- [jq](https://github.com/stedolan/jq)(it comes pre-installed in a lot of distros)
+- [jq](https://github.com/stedolan/jq) (it comes pre-installed in a lot of distros)
 
 # Install
 **Before to modify the the config file (`config.json`) make sure to read the guide to modify it**
@@ -87,3 +87,4 @@ This line will run the script at the 5 AM on Monday and Saturday of every week
 # TODO 
 
 - [ ] Add the log path to te config
+- [ ] Better csv file logging

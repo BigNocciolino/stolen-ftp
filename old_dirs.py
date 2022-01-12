@@ -47,6 +47,7 @@ if len(dir_list) > 0:
             date_dirs.append(dir)
 else: 
     logger.info("The download folder is empity")
+    sys.exit()
 
 #Convert the string dates saved in date_dirs list into a datetime object
 #So after we can sort it
