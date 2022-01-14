@@ -4,10 +4,12 @@ This is a little script written in bash for downloading files from a ftp server,
 
 NOTE: this is a little learning script for understanding bash and some little commands. I'm not an expert!
 
-# Requirements
+## Requirements
+
 - [jq](https://github.com/stedolan/jq) (it comes pre-installed in a lot of distros)
 
-# Install
+## Install
+
 **Before to modify the the config file (`config.json`) make sure to read the guide to modify it**
 
 ``` bash
@@ -17,13 +19,13 @@ nano config.json
 chmod +x clone.sh 
 ```
 
-# Info
+## Info
 
 - **The script download a file or a folder on the remote server secified in the config file**
 - **Save the output in a folder formatted as `%d-%m-%Y` in the download path**
 - **Run a python script to check and delete the oldest folders (only the time formatted)**
 
-# Usage
+## Usage
 
 You can run this script manually or you can [automate it](#automate-the-script)
 
@@ -41,8 +43,7 @@ Or you can override the -c option ad the script will find the config file in the
 
 This will get all the options from the config file, save the backup in a folder with the current date formatted as `% d-% m-% Y`, then run the old_dirs.py script which find all the folders formatted as first and delete the oldest, based on the `keep_backup` option in your configuration
 
-
-# Configuration 
+## Configuration 
 
 This is the default config file.
 
@@ -59,7 +60,8 @@ This is the default config file.
 }
 ```
 
-#### Options
+### Options
+
 - `url` => This is the url of the ftp server 
 - `username` => Username for authentication to the server
 - `password`=> This is the password for the authentication
