@@ -90,3 +90,5 @@ This line will run the script at the 5 AM on Monday and Saturday of every week
 
 - [ ] Add the log path to te config
 - [ ] Better csv file logging
+- [ ] Create log file for each backup
+    - [ ] Automatically delete  old logs
