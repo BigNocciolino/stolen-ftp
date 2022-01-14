@@ -41,6 +41,9 @@ LOG_INFO_PREFIX="[!][BASH]"
 
 CSV_FILE="$LOG_DIR/performance.csv"
 
+# TESTING redirect stdout/stderr to a file
+exec > $LOG_DIR 2>&1
+
 if [[ -d "$LOG_DIR" ]]; then
     echo "Starting log output in $LOG_DIR"
 else
@@ -71,7 +74,8 @@ fi
 
 #Always overwrite backup
 START=`date +%s`
-wget -m --user=$USERNAME --password=$PASSWORD "ftp://$URL/$SERVER_PATH" -P $FULL_DW_PATH
+# TESTING less verbosity
+wget -nv -m --user=$USERNAME --password=$PASSWORD "ftp://$URL/$SERVER_PATH" -P $FULL_DW_PATH
 END=`date +%s`
 
 RUNTIME=$((END-START))
@@ -80,7 +84,7 @@ echo "`date +%d-%m-%Y_%H-%M-%S`;$START;$END;$RUNTIME" >> $CSV_FILE
 
 #Start the script
 echo "$LOG_INFO_PREFIX Starting the old_dirs script" >> $LOG_FILE
-python3 old_dirs.py $FULL_DW_PATH -k $KEEP_BACKUP
+python3 old_dirs.py $DIR_PATH -k $KEEP_BACKUP
 
 echo "$LOG_INFO_PREFIX Backup runned in $RUNTIME s" >> $LOG_FILE
 echo "---------------------------------------" >> $LOG_FILE
