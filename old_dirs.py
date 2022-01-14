@@ -24,8 +24,6 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(filename=log_file, format='%(log_py)s %(message)s', level="INFO")
 logger = logging.LoggerAdapter(logger, extra)
 
-print(f"Starting log output at {log_file}")
-
 x = ""
 date_dirs = []
 old_folders = []

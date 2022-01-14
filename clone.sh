@@ -41,9 +41,6 @@ LOG_INFO_PREFIX="[!][BASH]"
 
 CSV_FILE="$LOG_DIR/performance.csv"
 
-# TESTING redirect stdout/stderr to a file
-exec > $LOG_DIR 2>&1
-
 if [[ -d "$LOG_DIR" ]]; then
     echo "Starting log output in $LOG_DIR"
 else
@@ -64,6 +61,9 @@ else
     echo "BEGIN OF LOG FILE - $(date +%d-%m-%Y_%H-%M-%S)" > $LOG_FILE
 fi
 
+# redirect stdout/stderr to a file
+exec >> $LOG_FILE 2>&1
+
 #Ceck for csv file
 if [[ -f "$CSV_FILE" ]]; then
     echo "`date +%d-%m-%Y_%H-%M-%S`;0;0;0" >> $CSV_FILE
@@ -74,7 +74,6 @@ fi
 
 #Always overwrite backup
 START=`date +%s`
-# TESTING less verbosity
 wget -nv -m --user=$USERNAME --password=$PASSWORD "ftp://$URL/$SERVER_PATH" -P $FULL_DW_PATH
 END=`date +%s`
 
