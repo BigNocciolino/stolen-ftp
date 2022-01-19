@@ -83,7 +83,7 @@ echo "`date +%d-%m-%Y_%H-%M-%S`;$START;$END;$RUNTIME" >> $CSV_FILE
 
 #Start the script
 echo "$LOG_INFO_PREFIX Starting the old_dirs script" >> $LOG_FILE
-python3 old_dirs.py $DIR_PATH -k $KEEP_BACKUP
+python3 $SCRIPTPATH/old_dirs.py $DIR_PATH -k $KEEP_BACKUP
 
 echo "$LOG_INFO_PREFIX Backup runned in $RUNTIME s" >> $LOG_FILE
 echo "---------------------------------------" >> $LOG_FILE
