@@ -35,7 +35,7 @@ KEEP_BACKUP=`jq .config.keep_backup $CONFIG_PATH -r`
 FULL_DW_PATH=$DIR_PATH$DIR_NAME
 
 LOG_DIR="$DIR_PATH/log"
-LOG_FILE="$LOG_DIR/log.txt"
+LOG_FILE="$LOG_DIR/log_$(date +"%d-%m-%Y").txt"
 LOG_ERROR_PREFIX="[X][BASH]"
 LOG_INFO_PREFIX="[!][BASH]"
 
@@ -48,7 +48,7 @@ else
     mkdir -p $LOG_DIR
 fi
 
-#cech if log file exist to not overwrite
+#check if log file exist to not overwrite
 if [[ -f "$LOG_FILE" ]]; then
     #File exist
     echo "---------- `date` ----------" >> $LOG_FILE
@@ -65,9 +65,7 @@ fi
 exec >> $LOG_FILE 2>&1
 
 #Ceck for csv file
-if [[ -f "$CSV_FILE" ]]; then
-    echo "`date +%d-%m-%Y_%H-%M-%S`;0;0;0" >> $CSV_FILE
-else
+if [[ ! -f "$CSV_FILE" ]]; then
     echo "Creating csv file"
     echo "Date (%d-%m-%Y_%H-%M-%S);Start (seconds since the Epoch);End (seconds since the Epoch);Job_time (seconds)" > $CSV_FILE
 fi
