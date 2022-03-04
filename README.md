@@ -78,17 +78,18 @@ To automate the script you can use cron, by adding this line in the `/etc/cronta
 ```
 
 This line will run the script at the 5 AM on Monday and Saturday of every week
+For help with cron schedule check out this [site](https://crontab.guru/);
 
 ## Features
 
 - Super fast, (thanks wget)
 - Run a script that only detects the folder saved with a date format and deletes the oldest
 - Log download time in a csv file, for performance logging (just for fun)
-- All info are logged in a text file
+- All the logs are flushed into a log file (valid for a day)
 
 # TODO 
 
 - [ ] Add the log path to te config
 - [ ] Better csv file logging
-- [ ] Create log file for each backup
-    - [ ] Automatically delete  old logs
+- [x] Create log file for each backup day
+- [ ] Automatically delete  old logs
