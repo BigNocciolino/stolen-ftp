@@ -6,16 +6,18 @@ from datetime import datetime
 import logging
 import argparse
 
+today = datetime.today().strftime("%d-%m-%Y")
+
 parser = argparse.ArgumentParser(description="Find the saved folders with a date format and delete the oldest ones")
 parser.add_argument('-k', help="The number of backup folder to keep", type=int, default=4)
 parser.add_argument('dw_path', help="The path where the backup are stored")
 args = parser.parse_args()
 
 #Regex pattern to find only folder named as date
-pattern = "^([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])(.|-)([1-9]|0[1-9]|1[0-2])(.|-|)20[0-9][0-9]$"
+f_pattern = "^([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-1])(.|-)([1-9]|0[1-9]|1[0-2])(.|-|)20[0-9][0-9]$"
 path = args.dw_path
 keep_backup = args.k
-log_file = os.path.join(path, "log/log.txt")
+log_file = os.path.join(path, f"log/log_{today}.txt")
 
 #Confnig for the logger
 LOG_PY_PREFIX="[PY]"
@@ -39,8 +41,8 @@ except OSError:
 if len(dir_list) > 0:
     #Travel all the list
     for dir in dir_list:
-        #Search if the dir_name match the regex pattern
-        x = re.search(pattern, dir)
+        #Search if the dir_name match the regex f_pattern
+        x = re.search(f_pattern, dir)
         if (x):
             date_dirs.append(dir)
 else: 
