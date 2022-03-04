@@ -78,6 +78,7 @@ To automate the script you can use cron, by adding this line in the `/etc/cronta
 ```
 
 This line will run the script at the 5 AM on Monday and Saturday of every week
+
 For help with cron schedule check out this [site](https://crontab.guru/);
 
 ## Features
